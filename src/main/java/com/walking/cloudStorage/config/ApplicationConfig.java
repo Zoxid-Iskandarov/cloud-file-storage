@@ -13,12 +13,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 import java.time.LocalDateTime;
 
 @Configuration
 @EnableJpaAuditing
 @EnableWebSecurity
+@EnableRedisHttpSession
 public class ApplicationConfig {
 
     @Bean
