@@ -1,7 +1,7 @@
 package com.walking.cloudStorage.service;
 
-import com.walking.cloudStorage.web.dto.UserRequest;
-import com.walking.cloudStorage.web.dto.UserResponse;
+import com.walking.cloudStorage.web.dto.user.UserRequest;
+import com.walking.cloudStorage.web.dto.user.UserResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 

@@ -4,7 +4,7 @@ import com.walking.cloudStorage.domain.exception.AuthenticationException;
 import com.walking.cloudStorage.domain.exception.BadRequestException;
 import com.walking.cloudStorage.domain.exception.DuplicateException;
 import com.walking.cloudStorage.domain.exception.ObjectNotFoundException;
-import com.walking.cloudStorage.web.dto.ErrorResponse;
+import com.walking.cloudStorage.web.dto.error.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,6 +38,18 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorResponse handleAuthenticationException(AuthenticationException e, HttpServletRequest request) {
         return buildErrorResponse(e.getMessage(), request, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleRuntimeException(RuntimeException e, HttpServletRequest request) {
+        return buildErrorResponse(e.getMessage(), request, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleException(HttpServletRequest request) {
+        return buildErrorResponse("An unexpected error occurred", request, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     private ErrorResponse buildErrorResponse(String message, HttpServletRequest request, HttpStatus httpStatus) {

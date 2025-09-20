@@ -2,7 +2,7 @@ package com.walking.cloudStorage.web.controller;
 
 import com.walking.cloudStorage.config.security.UserPrincipal;
 import com.walking.cloudStorage.service.UserService;
-import com.walking.cloudStorage.web.dto.UserResponse;
+import com.walking.cloudStorage.web.dto.user.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;

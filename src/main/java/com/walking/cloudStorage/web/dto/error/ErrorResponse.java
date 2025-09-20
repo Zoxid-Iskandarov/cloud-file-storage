@@ -1,4 +1,4 @@
-package com.walking.cloudStorage.web.dto;
+package com.walking.cloudStorage.web.dto.error;
 
 import lombok.*;
 

@@ -2,8 +2,8 @@ package com.walking.cloudStorage.web.controller;
 
 import com.walking.cloudStorage.domain.exception.BadRequestException;
 import com.walking.cloudStorage.service.AuthService;
-import com.walking.cloudStorage.web.dto.UserRequest;
-import com.walking.cloudStorage.web.dto.UserResponse;
+import com.walking.cloudStorage.web.dto.user.UserRequest;
+import com.walking.cloudStorage.web.dto.user.UserResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +22,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/sign-up")
+    @ResponseStatus(HttpStatus.CREATED)
     public UserResponse singUp(@RequestBody @Validated UserRequest userRequest,
                                BindingResult bindingResult,
                                HttpServletRequest request,

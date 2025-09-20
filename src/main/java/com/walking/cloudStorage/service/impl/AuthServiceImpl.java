@@ -4,8 +4,8 @@ import com.walking.cloudStorage.config.security.UserPrincipal;
 import com.walking.cloudStorage.domain.exception.AuthenticationException;
 import com.walking.cloudStorage.service.AuthService;
 import com.walking.cloudStorage.service.UserService;
-import com.walking.cloudStorage.web.dto.UserRequest;
-import com.walking.cloudStorage.web.dto.UserResponse;
+import com.walking.cloudStorage.web.dto.user.UserRequest;
+import com.walking.cloudStorage.web.dto.user.UserResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -36,6 +36,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserResponse signIn(UserRequest userRequest, HttpServletRequest request, HttpServletResponse response) {
+        if (!userService.existsByUsername(userRequest.getUsername())) {
+            throw new AuthenticationException("Invalid username or password");
+        }
+
         UserPrincipal userPrincipal = userService.loadUserByUsername(userRequest.getUsername());
 
         if (!passwordEncoder.matches(userRequest.getPassword(), userPrincipal.getPassword())) {

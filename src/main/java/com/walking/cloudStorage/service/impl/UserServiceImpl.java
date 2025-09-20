@@ -5,8 +5,8 @@ import com.walking.cloudStorage.domain.exception.DuplicateException;
 import com.walking.cloudStorage.domain.exception.ObjectNotFoundException;
 import com.walking.cloudStorage.respository.UserRepository;
 import com.walking.cloudStorage.service.UserService;
-import com.walking.cloudStorage.web.dto.UserRequest;
-import com.walking.cloudStorage.web.dto.UserResponse;
+import com.walking.cloudStorage.web.dto.user.UserRequest;
+import com.walking.cloudStorage.web.dto.user.UserResponse;
 import com.walking.cloudStorage.web.mapper.UserRequestMapper;
 import com.walking.cloudStorage.web.mapper.UserResponseMapper;
 import lombok.RequiredArgsConstructor;
@@ -55,5 +55,10 @@ public class UserServiceImpl implements UserService {
                         user.getUsername(),
                         user.getPassword()))
                 .orElseThrow(() -> new UsernameNotFoundException("Username '%s' not found".formatted(username)));
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
     }
 }
