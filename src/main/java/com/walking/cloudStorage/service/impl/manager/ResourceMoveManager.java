@@ -92,7 +92,6 @@ public class ResourceMoveManager {
             );
         } catch (Exception e) {
             log.error("Failed to move file: from='{}' to='{}', userId={}", from, to, userId, e);
-
             throw new RuntimeException("Failed to move file: " + from + " -> " + to, e);
         }
     }
@@ -112,7 +111,6 @@ public class ResourceMoveManager {
             return size;
         } catch (Exception e) {
             log.error("Failed to copy file: {} -> {}", sourcePrefix, targetPrefix, e);
-
             throw new RuntimeException("Failed to copy file: " + sourcePrefix + " -> " + targetPrefix, e);
         }
     }
@@ -124,7 +122,6 @@ public class ResourceMoveManager {
             }
         } catch (Exception e) {
             log.error("Rollback failed while removing copied objects: {}", copiedObjectNames, e);
-
             throw new RuntimeException("Rollback failed for copied objects", e);
         }
     }

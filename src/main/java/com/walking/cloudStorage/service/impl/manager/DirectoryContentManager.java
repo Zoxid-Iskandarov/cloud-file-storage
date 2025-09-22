@@ -58,7 +58,6 @@ public class DirectoryContentManager {
             return new ArrayList<>(resources.values());
         } catch (Exception e) {
             log.error("Failed to fetch directory content: path='{}', userId={}", path, userId, e);
-
             throw new RuntimeException("Failed to fetch content of directory: " + path, e);
         }
     }

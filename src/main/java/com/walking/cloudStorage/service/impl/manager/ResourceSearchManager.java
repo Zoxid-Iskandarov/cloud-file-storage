@@ -47,7 +47,6 @@ public class ResourceSearchManager {
             return new ArrayList<>(foundResources.values());
         } catch (Exception e) {
             log.error("Failed to search resources: query='{}', userId={}", query, userId, e);
-
             throw new RuntimeException("Failed to search resources for query: " + query, e);
         }
     }

@@ -5,5 +5,6 @@ import com.walking.cloudStorage.web.dto.user.UserResponse;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface UserResponseMapper extends Mappable<User, UserResponse> {
+public interface UserResponseMapper {
+    UserResponse toDto(User user);
 }

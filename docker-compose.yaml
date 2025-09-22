@@ -1,0 +1,54 @@
+services:
+  cloud-file-storage:
+    container_name: cloud-file-storage-app
+    build:
+      dockerfile: Dockerfile
+      context: .
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/cloud_file_storage_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_DATA_REDIS_HOST: redis
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ACCESS_KEY: minioAdmin
+      MINIO_SECRET_KEY: minioAdmin
+      MINIO_BUCKET: cloud-file-storage
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+      - redis
+      - minio
+
+  database:
+    container_name: cloud-file-storage-db
+    image: postgres:17.2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cloud_file_storage_db
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  redis:
+    container_name: cloud-file-storage-redis
+    image: redis:8.2
+    volumes:
+      - redis-data:/data
+
+  minio:
+    container_name: cloud-file-storage-minio
+    image: quay.io/minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioAdmin
+      MINIO_ROOT_PASSWORD: minioAdmin
+    ports:
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+
+volumes:
+  db-data:
+  redis-data:
+  minio-data:

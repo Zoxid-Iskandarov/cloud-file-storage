@@ -39,7 +39,6 @@ public class FileUploadManager {
             );
         } catch (Exception e) {
             log.error("Failed to upload file: '{}', userId={}, path='{}'", file.getOriginalFilename(), userId, path, e);
-
             throw new RuntimeException("Failed to upload file: " + file.getOriginalFilename(), e);
         }
     }

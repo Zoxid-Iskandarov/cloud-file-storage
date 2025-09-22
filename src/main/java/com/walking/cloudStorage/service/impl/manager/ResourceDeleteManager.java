@@ -36,7 +36,6 @@ public class ResourceDeleteManager {
             }
         } catch (Exception e) {
             log.error("Failed to delete directory '{}', userId={}", objectName, userId, e);
-
             throw new RuntimeException("Failed to delete directory: " + path, e);
         }
     }
@@ -50,7 +49,6 @@ public class ResourceDeleteManager {
             minioUtil.removeObject(objectName);
         } catch (Exception e) {
             log.error("Failed to delete file '{}', userId={}", objectName, userId, e);
-
             throw new RuntimeException("Failed to delete file: " + path, e);
         }
     }

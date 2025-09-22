@@ -46,7 +46,6 @@ public class ResourceInfoManager {
             );
         } catch (Exception e) {
             log.error("Failed to get file info for path='{}', userId={}", path, userId, e);
-
             throw new RuntimeException("Failed to get file info for path: " + path, e);
         }
     }

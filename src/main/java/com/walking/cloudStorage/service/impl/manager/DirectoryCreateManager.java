@@ -34,7 +34,6 @@ public class DirectoryCreateManager {
             );
         } catch (Exception e) {
             log.error("Failed to create directory: path='{}', userId={}", path, userId, e);
-
             throw new RuntimeException("Failed to create directory: " + path, e);
         }
     }

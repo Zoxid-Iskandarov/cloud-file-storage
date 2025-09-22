@@ -31,12 +31,12 @@ public class MinioInitializer implements ApplicationRunner {
                         .bucket(bucket)
                         .build());
 
-                log.info("Minio bucker '{}' created successfully", bucket);
+                log.info("Minio bucket '{}' created successfully", bucket);
             } else {
-                log.info("Minio bucker '{}' already exists", bucket);
+                log.info("Minio bucket '{}' already exists", bucket);
             }
         } catch (Exception e) {
-            log.error("Failed to initialize Minio bucker '{}'", bucket, e);
+            log.error("Failed to initialize Minio bucket '{}'", bucket, e);
             throw new MinioException();
         }
     }

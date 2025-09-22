@@ -6,6 +6,8 @@ import io.minio.messages.Item;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
@@ -79,7 +81,6 @@ public class ResourceDownloadManager {
 
         } catch (Exception e) {
             log.error("Failed to download directory '{}', userId={}", path, userId, e);
-
             throw new RuntimeException("Failed to download directory: " + path, e);
         }
     }
@@ -105,7 +106,6 @@ public class ResourceDownloadManager {
             }
         } catch (Exception e) {
             log.error("Failed to download file '{}', userId={}", path, userId, e);
-
             throw new RuntimeException("Failed to download file: " + path, e);
         }
     }
@@ -114,8 +114,8 @@ public class ResourceDownloadManager {
         fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8)
                 .replace("+", "%20");
 
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment; filename*=UTF-8''%s".formatted(fileName));
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"%s\"".formatted(fileName));
 
         if (size > -1) {
             response.setContentLengthLong(size);
