@@ -1,5 +1,8 @@
 package com.walking.cloudStorage.config;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +20,11 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 
 import java.time.LocalDateTime;
 
+@OpenAPIDefinition(info = @Info(
+        title = "Cloud file storage",
+        description = "REST API for managing files, directories and authentication in cloud file storage",
+        version = "1.0.0",
+        contact = @Contact(name = "Zoxid Iskandarov", email = "iskandarovzoxid27@gmail.com")))
 @Configuration
 @EnableJpaAuditing
 @EnableWebSecurity

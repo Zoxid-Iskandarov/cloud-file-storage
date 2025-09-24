@@ -4,6 +4,7 @@ import com.walking.cloudStorage.config.security.UserPrincipal;
 import com.walking.cloudStorage.domain.exception.AuthenticationException;
 import com.walking.cloudStorage.service.AuthService;
 import com.walking.cloudStorage.service.UserService;
+import com.walking.cloudStorage.service.impl.manager.DirectoryCreateManager;
 import com.walking.cloudStorage.web.dto.user.UserRequest;
 import com.walking.cloudStorage.web.dto.user.UserResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserService userService;
     private final SecurityContextRepository securityContextRepository;
     private final PasswordEncoder passwordEncoder;
+    private final DirectoryCreateManager directoryCreateManager;
 
     @Override
     @Transactional
@@ -33,6 +35,8 @@ public class AuthServiceImpl implements AuthService {
 
         UserPrincipal userPrincipal = userService.loadUserByUsername(userRequest.getUsername());
         authenticate(userPrincipal, request, response);
+
+        directoryCreateManager.createDirectory("", userPrincipal.getId());
 
         return user;
     }
