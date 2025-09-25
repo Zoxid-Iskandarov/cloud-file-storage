@@ -1,5 +1,6 @@
 package com.walking.cloudStorage.util;
 
+import com.walking.cloudStorage.domain.exception.DuplicateException;
 import com.walking.cloudStorage.domain.exception.ObjectNotFoundException;
 import com.walking.cloudStorage.web.dto.resource.ResourceResponse;
 import com.walking.cloudStorage.web.dto.resource.ResourceType;
@@ -106,6 +107,26 @@ public class MinioUtil {
         objectName = objectName.substring(userRoot(userId).length());
 
         throw new ObjectNotFoundException("File '%s' not found".formatted(nameOf(objectName)));
+    }
+
+    public void throwIfResourceExists(ResourceType resourceType, String objectName, String path, String name) {
+        if (resourceType == ResourceType.DIRECTORY) {
+            if (directoryExists(objectName)) {
+                String message = path.isEmpty()
+                        ? "Directory '%s' already exists".formatted(name)
+                        : "Directory '%s' already exists in '%s'".formatted(name, path);
+
+                throw new DuplicateException(message);
+            }
+        } else if (resourceType == ResourceType.FILE) {
+            if (fileExists(objectName)) {
+                String message = path.isEmpty()
+                        ? "File '%s' already exists".formatted(name)
+                        : "File '%s' already exists in '%s'".formatted(name, path);
+
+                throw new DuplicateException(message);
+            }
+        }
     }
 
     public ResourceResponse buildResourceResponseForDirectory(String path, String name) {

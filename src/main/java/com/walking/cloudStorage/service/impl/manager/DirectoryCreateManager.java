@@ -1,6 +1,5 @@
 package com.walking.cloudStorage.service.impl.manager;
 
-import com.walking.cloudStorage.domain.exception.DuplicateException;
 import com.walking.cloudStorage.util.MinioUtil;
 import com.walking.cloudStorage.web.dto.resource.ResourceResponse;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.io.ByteArrayInputStream;
 
 import static com.walking.cloudStorage.util.PathUtil.*;
+import static com.walking.cloudStorage.web.dto.resource.ResourceType.DIRECTORY;
 
 @Slf4j
 @Component
@@ -20,10 +20,7 @@ public class DirectoryCreateManager {
     public ResourceResponse createDirectory(String path, Long userId) {
         String objectName = buildObjectName(path, userId);
 
-        if (minioUtil.directoryExists(objectName)) {
-            throw new DuplicateException("Directory '%s' by path '%s' already exists"
-                    .formatted(nameOf(path), parentOf(path)));
-        }
+        minioUtil.throwIfResourceExists(DIRECTORY, objectName, parentOf(path), nameOf(path));
 
         try {
             minioUtil.putObject(objectName, new ByteArrayInputStream(new byte[0]));

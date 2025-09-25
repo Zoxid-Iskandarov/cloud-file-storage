@@ -90,7 +90,6 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public List<ResourceResponse> getDirectoryContent(String path, Long userId) {
         pathWithoutLeadingSlash(path);
-        pathEmptyOrWithTrailingSlash(path);
 
         return directoryContentManager.getDirectoryContent(path, userId);
     }

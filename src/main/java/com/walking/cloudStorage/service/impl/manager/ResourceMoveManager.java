@@ -1,6 +1,5 @@
 package com.walking.cloudStorage.service.impl.manager;
 
-import com.walking.cloudStorage.domain.exception.DuplicateException;
 import com.walking.cloudStorage.util.MinioUtil;
 import com.walking.cloudStorage.web.dto.resource.ResourceResponse;
 import io.minio.*;
@@ -9,11 +8,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.walking.cloudStorage.util.PathUtil.*;
+import static com.walking.cloudStorage.web.dto.resource.ResourceType.DIRECTORY;
+import static com.walking.cloudStorage.web.dto.resource.ResourceType.FILE;
 
 @Slf4j
 @Component
@@ -30,14 +32,12 @@ public class ResourceMoveManager {
         String targetPrefix = buildObjectName(to, userId);
 
         minioUtil.directoryExistsOrThrow(sourcePrefix, userId);
-
-        if (minioUtil.directoryExists(targetPrefix)) {
-            throw new DuplicateException("Directory '%s' by path '%s' already exists"
-                    .formatted(nameOf(to), parentOf(to)));
-        }
+        minioUtil.throwIfResourceExists(DIRECTORY, targetPrefix, parentOf(to), nameOf(to));
 
         List<String> copiedObjectNames = new ArrayList<>();
         Iterable<Result<Item>> results = minioUtil.listObjects(sourcePrefix, true);
+
+        boolean hasObjects = false;
 
         try {
             for (Result<Item> result : results) {
@@ -45,10 +45,16 @@ public class ResourceMoveManager {
 
                 if (objectName.endsWith("/")) continue;
 
+                hasObjects = true;
+
                 String newObjectName = targetPrefix.concat(objectName.substring(sourcePrefix.length()));
 
                 copyFile(objectName, newObjectName);
                 copiedObjectNames.add(newObjectName);
+            }
+
+            if (!hasObjects) {
+                minioUtil.putObject(targetPrefix, new ByteArrayInputStream(new byte[0]));
             }
 
             Iterable<Result<Item>> toDelete = minioUtil.listObjects(sourcePrefix, true);
@@ -75,11 +81,7 @@ public class ResourceMoveManager {
         String targetPrefix = buildObjectName(to, userId);
 
         minioUtil.fileExistsOrThrow(sourcePrefix, userId);
-
-        if (minioUtil.fileExists(targetPrefix)) {
-            throw new DuplicateException("File '%s' by path '%s' already exists"
-                    .formatted(nameOf(from), parentOf(to)));
-        }
+        minioUtil.throwIfResourceExists(FILE, targetPrefix, parentOf(to), nameOf(from));
 
         try {
             long size = copyFile(sourcePrefix, targetPrefix);

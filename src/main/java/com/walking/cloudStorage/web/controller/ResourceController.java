@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -111,10 +112,10 @@ public class ResourceController {
             @ApiResponse(responseCode = "409", description = "File already exists"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public List<ResourceResponse> uploadFile(@RequestParam(required = false, defaultValue = "") String path,
-                                             @RequestPart("file") MultipartFile[] files,
+                                             @RequestParam("object") MultipartFile[] files,
                                              @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return Arrays.stream(files)
                 .map(file -> storageService.uploadFile(path, userPrincipal.getId(), file))

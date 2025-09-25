@@ -13,17 +13,15 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 @Builder
 public class UserRequest {
-    @Schema(description = "Unique username of the user", example = "user_1", minLength = 2, maxLength = 100)
+    @Schema(description = "Unique username of the user", example = "user_1", minLength = 5, maxLength = 100)
     @NotBlank(message = "Username cannot be empty")
-    @Length(min = 2, max = 100, message = "Username must be between 2 and 100 characters")
+    @Length(min = 5, max = 100, message = "Username must be between 5 and 100 characters")
     private String username;
 
     @Schema(description = "User password. Must contain at least one uppercase, one lowercase letter and one number",
-            example = "Password123",
-            minLength = 6,
-            maxLength = 255)
+            example = "Password123", minLength = 6, maxLength = 20)
     @NotBlank(message = "Password cannot be empty")
-    @Length(min = 6, max = 255, message = "Password must be at least 6 characters long")
+    @Length(min = 6, max = 20, message = "Password must be at least 6 characters long")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$",
             message = "Password must contain at least one uppercase letter, one lowercase letter, and one number")
     private String password;

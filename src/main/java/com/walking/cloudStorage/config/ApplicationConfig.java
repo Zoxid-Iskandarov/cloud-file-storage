@@ -17,8 +17,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @OpenAPIDefinition(info = @Info(
         title = "Cloud file storage",
@@ -35,6 +38,7 @@ public class ApplicationConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/api/auth/sign-up", "/api/auth/sign-in", "/v3/api-docs/**",
                                 "/swagger-ui/**").permitAll()
@@ -57,6 +61,19 @@ public class ApplicationConfig {
     @Bean
     public SecurityContextRepository securityContextRepository() {
         return new HttpSessionSecurityContextRepository();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        return request -> {
+            CorsConfiguration corsConfiguration = new CorsConfiguration();
+            corsConfiguration.setAllowedOriginPatterns(List.of("*"));
+            corsConfiguration.setAllowedMethods(List.of("GET", "POST", "DELETE", "OPTIONS"));
+            corsConfiguration.setAllowedHeaders(List.of("*"));
+            corsConfiguration.setAllowCredentials(true);
+
+            return corsConfiguration;
+        };
     }
 
     private String buildUnauthorizedMessage(HttpServletRequest request) {

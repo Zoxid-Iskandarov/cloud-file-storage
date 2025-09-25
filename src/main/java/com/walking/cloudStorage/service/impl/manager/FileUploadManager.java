@@ -1,6 +1,5 @@
 package com.walking.cloudStorage.service.impl.manager;
 
-import com.walking.cloudStorage.domain.exception.DuplicateException;
 import com.walking.cloudStorage.util.MinioUtil;
 import com.walking.cloudStorage.web.dto.resource.ResourceResponse;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +11,7 @@ import java.io.InputStream;
 import java.util.Objects;
 
 import static com.walking.cloudStorage.util.PathUtil.*;
+import static com.walking.cloudStorage.web.dto.resource.ResourceType.FILE;
 
 @Slf4j
 @Component
@@ -22,10 +22,7 @@ public class FileUploadManager {
     public ResourceResponse uploadFile(String path, Long userId, MultipartFile file) {
         String objectName = buildObjectName(path, userId).concat(Objects.requireNonNull(file.getOriginalFilename()));
 
-        if (minioUtil.fileExists(objectName)) {
-            throw new DuplicateException("File '%s' by path '%s' already exists"
-                    .formatted(file.getOriginalFilename(), path));
-        }
+        minioUtil.throwIfResourceExists(FILE, objectName, path, file.getOriginalFilename());
 
         try (InputStream stream = file.getInputStream()) {
             String contentType = file.getContentType() == null ? "application/octet-stream" : file.getContentType();
