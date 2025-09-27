@@ -19,8 +19,8 @@ spring:
       host: localhost
   servlet:
     multipart:
-      max-file-size: 200MB
-      max-request-size: 600MB
+      max-file-size: 150MB
+      max-request-size: 300MB
 
 minio:
   endpoint: http://localhost:9000

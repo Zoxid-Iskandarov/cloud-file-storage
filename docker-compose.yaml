@@ -1,7 +1,7 @@
 services:
   frontend:
     container_name: cloud-storage-frontend
-    image: zoxid/cloud-storage-frontend
+    image: zoxid/cloud-storage-frontend:1.0
     ports:
       - "80:80"
     depends_on:
