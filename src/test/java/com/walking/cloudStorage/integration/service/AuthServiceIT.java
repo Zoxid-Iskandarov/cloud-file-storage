@@ -53,7 +53,7 @@ public class AuthServiceIT {
     private DirectoryCreateManager directoryCreateManager;
 
     @Test
-    @Sql(scripts = "classpath:sql/cleanup.sql")
+    @Sql(scripts = "classpath:data/sql/cleanup.sql")
     void signUp_whenValidRequest_success() {
         UserRequest userRequest = getUserRequest();
 
@@ -70,7 +70,7 @@ public class AuthServiceIT {
     }
 
     @Test
-    @Sql(scripts = {"classpath:sql/cleanup.sql", "classpath:sql/data.sql"})
+    @Sql(scripts = {"classpath:data/sql/cleanup.sql", "classpath:data/sql/data.sql"})
     void signIn_whenValidRequest_success() {
         UserRequest userRequest = getUserRequest();
 
@@ -85,13 +85,13 @@ public class AuthServiceIT {
     }
 
     @Test
-    @Sql(scripts = "classpath:sql/cleanup.sql")
+    @Sql(scripts = "classpath:data/sql/cleanup.sql")
     void signIn_whenUsernameNotExists_failed() {
         assertThrows(AuthenticationException.class, () -> authService.signIn(getUserRequest(), request, response));
     }
 
     @Test
-    @Sql(scripts = {"classpath:sql/cleanup.sql", "classpath:sql/data.sql"})
+    @Sql(scripts = {"classpath:data/sql/cleanup.sql", "classpath:data/sql/data.sql"})
     void signIn_whenPasswordIncorrect_failed() {
         UserRequest userRequest = getUserRequest();
         userRequest.setPassword(INVALID_PASSWORD);

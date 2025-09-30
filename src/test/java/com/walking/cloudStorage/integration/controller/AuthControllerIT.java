@@ -61,7 +61,7 @@ public class AuthControllerIT {
     private DirectoryCreateManager directoryCreateManager;
 
     @Test
-    @Sql(scripts = "classpath:sql/cleanup.sql")
+    @Sql(scripts = "classpath:data/sql/cleanup.sql")
     void signUp_whenValidRequest_success() throws Exception {
         mockMvc.perform(post("/api/auth/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -74,7 +74,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @Sql(scripts = "classpath:sql/cleanup.sql")
+    @Sql(scripts = "classpath:data/sql/cleanup.sql")
     void signUp_whenInvalidRequest_failed() throws Exception {
         UserRequest userRequest = getUserRequest();
         userRequest.setUsername("");
@@ -89,7 +89,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @Sql(scripts = {"classpath:sql/cleanup.sql", "classpath:sql/data.sql"})
+    @Sql(scripts = {"classpath:data/sql/cleanup.sql", "classpath:data/sql/data.sql"})
     void signUp_whenUsernameAlreadyExists_failed() throws Exception {
         mockMvc.perform(post("/api/auth/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -100,7 +100,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @Sql(scripts = {"classpath:sql/cleanup.sql", "classpath:sql/data.sql"})
+    @Sql(scripts = {"classpath:data/sql/cleanup.sql", "classpath:data/sql/data.sql"})
     void signIn_whenValidRequest_success() throws Exception {
         mockMvc.perform(post("/api/auth/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -112,7 +112,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @Sql(scripts = "classpath:sql/cleanup.sql")
+    @Sql(scripts = "classpath:data/sql/cleanup.sql")
     void signIn_whenInvalidRequest_failed() throws Exception {
         UserRequest userRequest = getUserRequest();
         userRequest.setUsername("");
@@ -127,7 +127,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @Sql(scripts = "classpath:sql/cleanup.sql")
+    @Sql(scripts = "classpath:data/sql/cleanup.sql")
     void signIn_whenUserNotFound_failed() throws Exception {
         mockMvc.perform(post("/api/auth/sign-in")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -139,7 +139,7 @@ public class AuthControllerIT {
     }
 
     @Test
-    @Sql(scripts = {"classpath:sql/cleanup.sql", "classpath:sql/data.sql"})
+    @Sql(scripts = {"classpath:data/sql/cleanup.sql", "classpath:data/sql/data.sql"})
     void signIn_whenPasswordIncorrect_failed() throws Exception {
         UserRequest userRequest = getUserRequest();
         userRequest.setPassword(INVALID_PASSWORD);
@@ -155,14 +155,14 @@ public class AuthControllerIT {
 
     @Test
     @WithMockUserPrincipal
-    @Sql(scripts = {"classpath:sql/cleanup.sql", "classpath:sql/data.sql"})
+    @Sql(scripts = {"classpath:data/sql/cleanup.sql", "classpath:data/sql/data.sql"})
     void signOut_whenUserAuthenticated_success() throws Exception {
         mockMvc.perform(post("/api/auth/sign-out"))
                 .andExpect(status().isNoContent());
     }
 
     @Test
-    @Sql(scripts = "classpath:sql/cleanup.sql")
+    @Sql(scripts = "classpath:data/sql/cleanup.sql")
     void signOut_whenUserNotAuthenticated_failed() throws Exception {
         mockMvc.perform(post("/api/auth/sign-out"))
                 .andExpect(status().isUnauthorized())

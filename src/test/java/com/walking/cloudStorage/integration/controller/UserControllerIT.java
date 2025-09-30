@@ -51,7 +51,7 @@ public class UserControllerIT {
 
     @Test
     @WithMockUserPrincipal
-    @Sql(scripts = {"classpath:sql/cleanup.sql", "classpath:sql/data.sql"})
+    @Sql(scripts = {"classpath:data/sql/cleanup.sql", "classpath:data/sql/data.sql"})
     void me_whenUserAuthenticated_success() throws Exception {
         mockMvc.perform(get("/api/user/me"))
                 .andExpect(status().isOk())
@@ -62,7 +62,7 @@ public class UserControllerIT {
     }
 
     @Test
-    @Sql(scripts = "classpath:sql/cleanup.sql")
+    @Sql(scripts = "classpath:data/sql/cleanup.sql")
     void me_whenUserNotAuthenticated_failed() throws Exception {
         mockMvc.perform(get("/api/user/me"))
                 .andExpect(status().isUnauthorized())

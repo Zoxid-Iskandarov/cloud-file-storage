@@ -40,7 +40,7 @@ public class UserServiceIT {
     private MinioInitializer minioInitializer;
 
     @Test
-    @Sql(scripts = {"classpath:sql/cleanup.sql", "classpath:sql/data.sql"})
+    @Sql(scripts = {"classpath:data/sql/cleanup.sql", "classpath:data/sql/data.sql"})
     void getById_whenUserExists_success() {
         UserResponse userResponse = userService.getById(USER_ID);
 
@@ -50,13 +50,13 @@ public class UserServiceIT {
     }
 
     @Test
-    @Sql(scripts = "classpath:sql/cleanup.sql")
+    @Sql(scripts = "classpath:data/sql/cleanup.sql")
     void getById_whenUserNotExists_failed() {
         assertThrows(ObjectNotFoundException.class, () -> userService.getById(USER_ID));
     }
 
     @Test
-    @Sql(scripts = "classpath:sql/cleanup.sql")
+    @Sql(scripts = "classpath:data/sql/cleanup.sql")
     void create_whenValidRequest_success() {
         UserResponse userResponse = userService.create(getUserRequest());
 
@@ -67,13 +67,13 @@ public class UserServiceIT {
     }
 
     @Test
-    @Sql(scripts = {"classpath:sql/cleanup.sql", "classpath:sql/data.sql"})
+    @Sql(scripts = {"classpath:data/sql/cleanup.sql", "classpath:data/sql/data.sql"})
     void create_whenUsernameAlreadyExists_failed() {
         assertThrows(DuplicateException.class, () -> userService.create(getUserRequest()));
     }
 
     @Test
-    @Sql(scripts = {"classpath:sql/cleanup.sql", "classpath:sql/data.sql"})
+    @Sql(scripts = {"classpath:data/sql/cleanup.sql", "classpath:data/sql/data.sql"})
     void loadUserByUsername_whenUserExists_success() {
         UserPrincipal userPrincipal = userService.loadUserByUsername(USERNAME);
 
@@ -84,7 +84,7 @@ public class UserServiceIT {
     }
 
     @Test
-    @Sql(scripts = "classpath:sql/cleanup.sql")
+    @Sql(scripts = "classpath:data/sql/cleanup.sql")
     void loadUserByUsername_whenUserNotExists_failed() {
         assertThrows(UsernameNotFoundException.class, () ->  userService.loadUserByUsername(USERNAME));
     }
