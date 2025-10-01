@@ -1,64 +1,20 @@
 package com.walking.cloudStorage.integration.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.redis.testcontainers.RedisContainer;
-import com.walking.cloudStorage.config.init.MinioInitializer;
+import com.walking.cloudStorage.integration.IntegrationTestBase;
 import com.walking.cloudStorage.integration.annotation.WithMockUserPrincipal;
-import com.walking.cloudStorage.service.impl.manager.DirectoryCreateManager;
 import com.walking.cloudStorage.web.dto.user.UserRequest;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@Testcontainers
-@AutoConfigureMockMvc
-public class AuthControllerIT {
-    private static final String POSTGRES_IMAGE_NAME = "postgres:17.2";
-    private static final String REDIS_IMAGE_NAME = "redis:8.2";
-    private static final Long USER_ID = 1L;
-    private static final String USERNAME = "Zoxid27";
-    private static final String VALID_PASSWORD = "Password123";
-    private static final String INVALID_PASSWORD = "InvalidPassword123";
-
-    @ServiceConnection
-    @Container
-    private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>(POSTGRES_IMAGE_NAME);
-
-    @Container
-    private static final RedisContainer redisContainer = new RedisContainer(REDIS_IMAGE_NAME);
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.redis.host", redisContainer::getHost);
-        registry.add("spring.data.redis.port", redisContainer::getFirstMappedPort);
-    }
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @MockitoBean
-    private MinioInitializer minioInitializer;
-
-    @MockitoBean
-    private DirectoryCreateManager directoryCreateManager;
+@RequiredArgsConstructor
+public class AuthControllerIT extends IntegrationTestBase {
+    private final ObjectMapper objectMapper;
 
     @Test
     @Sql(scripts = "classpath:data/sql/cleanup.sql")

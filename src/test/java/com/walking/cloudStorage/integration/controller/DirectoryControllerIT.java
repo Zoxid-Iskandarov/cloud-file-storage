@@ -1,63 +1,26 @@
 package com.walking.cloudStorage.integration.controller;
 
+import com.walking.cloudStorage.integration.IntegrationTestBase;
 import com.walking.cloudStorage.integration.annotation.WithMockUserPrincipal;
 import com.walking.cloudStorage.integration.util.MinioTestUtil;
 import com.walking.cloudStorage.service.StorageService;
 import io.minio.MinioClient;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.containers.MinIOContainer;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@Testcontainers
-@AutoConfigureMockMvc
 @WithMockUserPrincipal
 @Sql(scripts = {"classpath:data/sql/cleanup.sql", "classpath:data/sql/data.sql"})
-public class DirectoryControllerIT {
-    private static final String POSTGRES_IMAGE_NAME = "postgres:17.2";
-    private static final String MINIO_IMAGE_NAME = "minio/minio:latest";
-    private static final String BUCKET = "test-bucket";
-    private static final Long USER_ID = 1L;
-
-    @Container
-    @ServiceConnection
-    private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>(POSTGRES_IMAGE_NAME);
-
-    @Container
-    private static final MinIOContainer minIOContainer = new MinIOContainer(MINIO_IMAGE_NAME);
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("minio.endpoint", minIOContainer::getS3URL);
-        registry.add("minio.access-key", minIOContainer::getUserName);
-        registry.add("minio.secret-key", minIOContainer::getPassword);
-        registry.add("minio.bucket", () -> BUCKET);
-    }
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private MinioClient minioClient;
-
-    @Autowired
-    private StorageService storageService;
+@RequiredArgsConstructor
+public class DirectoryControllerIT extends IntegrationTestBase {
+    private final MinioClient minioClient;
+    private final StorageService storageService;
 
     @BeforeEach
     void setUp() throws Exception {

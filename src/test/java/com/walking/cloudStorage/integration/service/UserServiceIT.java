@@ -1,43 +1,23 @@
 package com.walking.cloudStorage.integration.service;
 
-import com.walking.cloudStorage.config.init.MinioInitializer;
 import com.walking.cloudStorage.config.security.UserPrincipal;
 import com.walking.cloudStorage.domain.exception.DuplicateException;
 import com.walking.cloudStorage.domain.exception.ObjectNotFoundException;
+import com.walking.cloudStorage.integration.IntegrationTestBase;
 import com.walking.cloudStorage.service.UserService;
 import com.walking.cloudStorage.web.dto.user.UserRequest;
 import com.walking.cloudStorage.web.dto.user.UserResponse;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest
-@Testcontainers
-public class UserServiceIT {
-    private static final String POSTGRES_IMAGE_NAME = "postgres:17.2";
-    private static final Long USER_ID = 1L;
-    private static final String USERNAME = "Zoxid27";
-    private static final String PASSWORD = "Password123";
-
-    @ServiceConnection
-    @Container
-    private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>(POSTGRES_IMAGE_NAME);
-
-    @Autowired
-    private UserService userService;
-
-    @MockitoBean
-    private MinioInitializer minioInitializer;
+@RequiredArgsConstructor
+public class UserServiceIT extends IntegrationTestBase {
+    private final UserService userService;
 
     @Test
     @Sql(scripts = {"classpath:data/sql/cleanup.sql", "classpath:data/sql/data.sql"})
@@ -92,7 +72,7 @@ public class UserServiceIT {
     private UserRequest getUserRequest() {
         return UserRequest.builder()
                 .username(USERNAME)
-                .password(PASSWORD)
+                .password(VALID_PASSWORD)
                 .build();
     }
 }

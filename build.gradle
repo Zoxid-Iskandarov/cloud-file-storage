@@ -46,7 +46,7 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter'
 
     testImplementation 'org.testcontainers:postgresql'
-    testImplementation "com.redis:testcontainers-redis:$redisTestcontainersVersion"
+    testImplementation 'com.redis:testcontainers-redis'
     testImplementation "org.testcontainers:minio:$minioTestcontainersVersion"
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
