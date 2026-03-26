@@ -64,7 +64,7 @@ docker compose down
 
 - 💻 **Frontend:** http://localhost:80
 
-- 📑 **Swagger UI:** http://localhost:8080/swagger-ui.html
+- 📑 **Swagger UI:** http://localhost:8080/swagger-ui/index.html
 
 - 📦 **MinIO UI:** http://localhost:9001
 
